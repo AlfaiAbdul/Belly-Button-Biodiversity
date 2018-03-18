@@ -2,9 +2,10 @@
 ### Belly Button Biodiversity
 ![Preview](dashboard.jpg)
 ![Preview](bubble.jpg)
-![Preview](meter.jpg) ![Preview](pie.jpg)
+![Preview](meter.jpg) 
+![Preview](pie.jpg)
 
-[Click here to vist deployed app](https://analyzingbellybbiodiversity.herokuapp.com/)
+###[Click here to visit deployed app](https://analyzingbellybbiodiversity.herokuapp.com/)
 
 
 In this assignment, you will build an interactive dashboard to explore the [Belly Button Biodiversity DataSet](http://robdunnlab.com/projects/belly-button-biodiversity/).
