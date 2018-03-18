@@ -1,6 +1,9 @@
 
 # Dependencies
 
+import pandas as pd
+import numpy as np
+
 # Flask (Server)
 from flask import Flask, jsonify, render_template, request, flash, redirect
 
@@ -10,34 +13,27 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func, desc,select
 
-import pandas as pd
-import numpy as np
 
-
-
-# Database Setup
+# Setups for Database
 
 engine = create_engine("sqlite:///DataSets/belly_button_biodiversity.sqlite")
 
-# reflect an existing database into a new model
+# reflection of Database
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
 Base.classes.keys()
-# Save reference to the table
+# Reference to the tables
 OTU = Base.classes.otu
 Samples = Base.classes.samples
 Samples_Metadata= Base.classes.samples_metadata
 
-# Create our session (link) from Python to the DB
+# Creating session from Python to the DB
 session = Session(engine)
 
 
-# Flask Setup
-
+# Flask 
 app = Flask(__name__)
-
-# Flask Routes
 
 # Returns the dashboard homepage
 @app.route("/")
@@ -50,16 +46,16 @@ def index():
 def names():
     """Return a list of sample names."""
 
-    # Use Pandas to perform the sql query
+    # Pandas for sql query
     stmt = session.query(Samples).statement
     df = pd.read_sql_query(stmt, session.bind)
     df.set_index('otu_id', inplace=True)
 
-    # Return a list of the column names (sample names)
+    # Returning list of the column names (sample names)
     return jsonify(list(df.columns))
 
 
-# Returns a list of OTU descriptions 
+# Returning list of OTU descriptions 
 @app.route('/otu')
 def otu():
     """Return a list of OTU descriptions."""
@@ -96,38 +92,38 @@ def sample_metadata(sample):
     return jsonify(sample_metadata)
 
 
-# Returns an integer value for the weekly washing frequency `WFREQ`
+# Returning int for weekly washing frequency 
 @app.route('/wfreq/<sample>')
 def sample_wfreq(sample):
     """Return the Weekly Washing Frequency as a number."""
 
-    # `sample[3:]` strips the `BB_` prefix
+    # "sample[3:]" to strip  "BB_" 
     results = session.query(Samples_Metadata.WFREQ).\
         filter(Samples_Metadata.SAMPLEID == sample[3:]).all()
     wfreq = np.ravel(results)
 
-    # Return only the first integer value for washing frequency
+    # Returning first int for washing frequency
     return jsonify(int(wfreq[0]))
 
 
-# Return a list of dictionaries containing sorted lists  for `otu_ids`and `sample_values`
+# Returning list of dictionaries containing (otu_ids, sample_values)
 @app.route('/samples/<sample>')
 def samples(sample):
     """Return a list dictionaries containing `otu_ids` and `sample_values`."""
     stmt = session.query(Samples).statement
     df = pd.read_sql_query(stmt, session.bind)
 
-    # Make sure that the sample was found in the columns, else throw an error
+    # testing to ensure samples were found in the columns, otherwise (error)
     if sample not in df.columns:
         return jsonify(f"Error! Sample: {sample} Not Found!"), 400
 
-    # Return any sample values greater than 1
+    # Returning samples greater than 1
     df = df[df[sample] > 1]
 
-    # Sort the results by sample in descending order
+    # Sort by descending 
     df = df.sort_values(by=sample, ascending=0)
 
-    # Format the data to send as json
+    # sending data as json after formating
     data = [{
         "otu_ids": df[sample].index.values.tolist(),
         "sample_values": df[sample].values.tolist()
