@@ -4,8 +4,8 @@
 ![Preview](bubble.jpg)
 ![Preview](meter.jpg) ![Preview](pie.jpg)
 
+[Click here to vist deployed app](https://analyzingbellybbiodiversity.herokuapp.com/)
 
-You can visit the app @ herocu server --> https://analyzingbellybbiodiversity.herokuapp.com/
 
 In this assignment, you will build an interactive dashboard to explore the [Belly Button Biodiversity DataSet](http://robdunnlab.com/projects/belly-button-biodiversity/).
 
