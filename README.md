@@ -1,6 +1,9 @@
 
 ### Belly Button Biodiversity
-![Preview](dashb.jpg)
+![Preview](dashboard.jpg)
+![Preview](bubble.jpg)
+![Preview](meter.jpg) ![Preview](pie.jpg)
+
 
 You can visit the app @ herocu server --> https://analyzingbellybbiodiversity.herokuapp.com/
 
